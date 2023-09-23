@@ -32,6 +32,17 @@ public class Producto {
     @JoinColumn(name = "id_categoria", insertable = false, updatable = false)
     private Categoria categoria;
 
+    @OneToMany(mappedBy = "producto")
+    private List<ComprasProducto> comprasProductos;
+
+    public List<ComprasProducto> getCompras() {
+        return comprasProductos;
+    }
+
+    public void setCompras(List<ComprasProducto> compras) {
+        this.comprasProductos = compras;
+    }
+
     public Integer getIdProducto() {
         return idProducto;
     }
