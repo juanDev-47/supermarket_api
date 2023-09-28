@@ -3,6 +3,7 @@ package com.projectManager.andromeda.persistence;
 import com.projectManager.andromeda.domain.Purchase;
 import com.projectManager.andromeda.domain.repository.PurchaseRepository;
 import com.projectManager.andromeda.persistence.crud.CompraCrudRepository;
+import com.projectManager.andromeda.persistence.entity.Compra;
 import com.projectManager.andromeda.persistence.mapper.PurchaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,16 +20,19 @@ public class CompraRepository implements PurchaseRepository {
 
     @Override
     public List<Purchase> getAll() {
-        return null;
+        return mapper.toPurchases((List<Compra>) compraCrudRepository.findAll());
     }
 
     @Override
     public Optional<List<Purchase>> getByClient(String clientId) {
-        return Optional.empty();
+        List<Compra> purchases = (List<Compra>) compraCrudRepository.findByIdCliente(clientId);
+        return Optional.of(mapper.toPurchases(purchases));
     }
 
     @Override
     public Purchase save(Purchase purchase) {
-        return null;
+        Compra compra = mapper.toCompra(purchase);
+        compra.getProductos().forEach(producto -> producto.setCompra(compra));
+        return mapper.toPurchase(compraCrudRepository.save(compra));
     }
 }
